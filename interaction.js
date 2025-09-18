@@ -2,11 +2,39 @@
 // La création d'un Dnd requière un canvas et un interacteur.
 // L'interacteur viendra dans un second temps donc ne vous en souciez pas au départ.
 function DnD(canvas, interactor) {
-	// Définir ici les attributs de la 'classe'
+  // Définir ici les attributs de la 'classe'
+  this.initialX = 0;
+  this.initialY = 0;
+  this.finalX = 0;
+  this.finalY = 0;
+  // Developper les 3 fonctions gérant les événements
+  function mousedown(evt) {
+    var mousePos = getMousePosition(canvas, evt);
+    this.initialX = mousePos.x;
+    this.initialY = mousePos.y;
+    console.log("Start at (" + this.initialX + "," + this.initialY + ")");
+  }
+  function mouseup(evt) {
+    var mousePos = getMousePosition(canvas, evt);
+    this.finalX = mousePos.x;
+    this.finalY = mousePos.y;
+    console.log("From (" + this.initialX + "," + this.initialY + ") to (" + this.finalX + "," + this.finalY + ")");
+    this.initialX = 0;
+    this.initialY = 0;
+  }
+  function mousemove(evt) {
+    if (this.initialX != 0 && this.initialY != 0) {
+      var mousePos = getMousePosition(canvas, evt);
+      this.finalX = mousePos.x;
+      this.finalY = mousePos.y;
+      console.log("Moving at (" + this.finalX + "," + this.finalY + ")");
+    }
+  }
+  // Associer les fonctions précédentes aux évènements du canvas.
+  canvas.addEventListener('mousedown', mousedown.bind(this), false);
+  canvas.addEventListener('mouseup', mouseup.bind(this), false);
+  canvas.addEventListener('mousemove', mousemove.bind(this), false);
 
-	// Developper les 3 fonctions gérant les événements
-
-	// Associer les fonctions précédentes aux évènements du canvas.
 };
 
 
@@ -18,6 +46,3 @@ function getMousePosition(canvas, evt) {
     y: evt.clientY - rect.top
   };
 };
-
-
-
