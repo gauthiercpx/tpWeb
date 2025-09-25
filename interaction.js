@@ -7,27 +7,29 @@ function DnD(canvas, interactor) {
   this.initialY = 0;
   this.finalX = 0;
   this.finalY = 0;
+  this.interactor = interactor;
   // Developper les 3 fonctions gérant les événements
   function mousedown(evt) {
     var mousePos = getMousePosition(canvas, evt);
     this.initialX = mousePos.x;
     this.initialY = mousePos.y;
-    console.log("Start at (" + this.initialX + "," + this.initialY + ")");
+    // console.log("Start at (" + this.initialX + "," + this.initialY + ")");
+    interactor.onInteractionStart(this);
   }
   function mouseup(evt) {
     var mousePos = getMousePosition(canvas, evt);
     this.finalX = mousePos.x;
     this.finalY = mousePos.y;
-    console.log("From (" + this.initialX + "," + this.initialY + ") to (" + this.finalX + "," + this.finalY + ")");
-    this.initialX = 0;
-    this.initialY = 0;
+    // console.log("From (" + this.initialX + "," + this.initialY + ") to (" + this.finalX + "," + this.finalY + ")");
+    interactor.onInteractionEnd(this);
   }
   function mousemove(evt) {
     if (this.initialX != 0 && this.initialY != 0) {
       var mousePos = getMousePosition(canvas, evt);
       this.finalX = mousePos.x;
       this.finalY = mousePos.y;
-      console.log("Moving at (" + this.finalX + "," + this.finalY + ")");
+      // console.log("Moving at (" + this.finalX + "," + this.finalY + ")");
+      interactor.onInteractionUpdate(this);
     }
   }
   // Associer les fonctions précédentes aux évènements du canvas.
