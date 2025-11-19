@@ -28,3 +28,9 @@ function Line(x, y, x2, y2, lw, color) {
 }
 Line.prototype = new Shape();
 
+function Circle(x, y, r, lw, color) {
+    Shape.call(this, x, y, lw, color);
+    this.r = r;
+}
+Circle.prototype = new Shape();
+
