@@ -1,53 +1,107 @@
-﻿# TP Web : Javascript et HTML5 - Application de Dessin
+﻿# 🎨 Application de Dessin Vectoriel - Canvas HTML5
 
-## 1. Introduction
+> **Étudiant** : Gauthier COPPEAUX  
+> **Formation** : M1 IL CLA1 - Web Engineering  
+> **Année** : 2025-26  
+> **Date** : 27 novembre 2025
 
-Ce dépôt contient le code source de mon projet réalisé pour le module **TP Web : Javascript et HTML5**.
-L'objectif était de développer une application de dessin vectoriel simple dans le navigateur, en utilisant l'API Canvas HTML5 et une architecture MVC (Modèle-Vue-Contrôleur).
+## Description
 
-## 2. Fonctionnalités implémentées
+Application de dessin vectoriel simple développée avec JavaScript vanilla et l'API Canvas HTML5 dans le cadre du module **TP Web : Javascript et HTML5**. Conformément au sujet, l'architecture MVC est utilisée pour structurer le code.
 
-Au cours de ce TP, j'ai implémenté les fonctionnalités suivantes :
+Le projet couvre ce qui était demandé dans le [sujet](https://docs.google.com/document/d/1bgGhG9ZVWwf_K9euPAJ9xq8PJsT_zZiJFpPVtc_cW8o/edit?tab=t.0) et j’ai ajouté quelques améliorations personnelles (forme cercle, ajustements UX, personnalisation couleur / épaisseur).
 
-### Formes géométriques
+## Aperçu
 
-- **Rectangle** : Dessin par cliquer-glisser.
-- **Ligne** : Tracé de lignes simples.
-- **Cercle** : Ajout de la forme Cercle (calcul du rayon dynamique).
+![Aperçu de l’application](./Capture%20d%E2%80%99%C3%A9cran%202025-11-30%20155627.png)
 
-### Gestion de l'affichage
+## Fonctionnalités du sujet (base)
 
-- **Liste des formes** : Affichage dynamique de toutes les formes dessinées dans une liste latérale.
-- **Détails** : Chaque élément de la liste affiche son type et ses coordonnées (arrondies pour plus de lisibilité).
+### Partie 1 : Modèle de données
 
-### Interactions et Modifications
+- Classe `Drawing` (stockage des formes)
+- Classe abstraite `Shape`
+- Formes concrètes : `Rectangle`, `Line`
 
-- **Suppression individuelle** : Chaque élément de la liste possède un bouton pour supprimer la forme correspondante sur le canvas.
-- **Tout effacer** : Un bouton "Corbeille" permet de vider entièrement le dessin.
-- **Paramètres** : Choix de la couleur et de l'épaisseur du trait via l'interface.
+### Partie 2 : Vue - Rendu Canvas
 
-## 3. Architecture du code
+- Fonction `paint()` pour redessiner l’ensemble
+- Rendu rectangle via `strokeRect()`
+- Rendu ligne via path (`moveTo` / `lineTo`)
+- Gestion couleur / épaisseur du trait
 
-Le projet est structuré pour séparer les responsabilités :
+### Partie 3 : Contrôleur - Interactions
 
-- `model.js` : Définit les classes `Drawing`, `Shape`, `Rectangle`, `Line` et `Circle`.
-- `view.js` : Gère le rendu graphique (`paint`) et la mise à jour de l'interface DOM (`updateShapeList`).
-- `controller.js` : Fait le lien entre les interactions utilisateur (souris, boutons) et le modèle.
-- `interaction.js` : Gère les événements de bas niveau (DnD).
-- `main.js` : Point d'entrée de l'application.
+- Événements souris (`mousedown`, `mousemove`, `mouseup`)
+- Conversion des coordonnées souris → coordonnées canvas
+- Dessin interactif rectangle et ligne
+- Sélection outil (radio buttons)
+- Bouton « Effacer tout »
 
-## 4. Comment lancer le projet
+### Partie 4 : Vue - Liste des formes
 
-Il suffit d'ouvrir le fichier `canvas.html` directement dans votre navigateur :
+- Liste HTML des formes
+- Affichage type + coordonnées (arrondies)
+- Suppression par élément
+- Synchronisation automatique avec le canvas
 
-- **Double-cliquez** sur `canvas.html` dans l'explorateur de fichiers
-- Ou faites **clic droit → Ouvrir avec → votre navigateur**
+## Fonctions ajoutées (au-delà du sujet)
 
-Aucune installation n'est nécessaire !
+### 1. Formes géométriques avancées
 
-### Alternative : Serveur local (optionnel)
+- Forme `Circle` (rayon calculé dynamiquement)
+  - Classe dédiée + rendu avec `arc()`
+  - Ajout d’un bouton radio supplémentaire
 
-Si vous préférez utiliser un serveur local :
+### 2. Ajout bouton clear
+
+- Bouton « Effacer tout » pour réinitialiser le dessin
+  - Vide le modèle et rafraîchit la vue
+
+
+## Structure du code
+
+Conformément au sujet, le projet utilise une architecture **MVC** avec séparation claire des responsabilités :
+
+- **`model.js`** : Définit les classes métier
+
+  - `Drawing` : Gère la collection de formes
+  - `Shape` : Classe de base abstraite
+  - `Rectangle`, `Line`, `Circle` : Classes concrètes pour chaque forme
+
+- **`view.js`** : Gère le rendu visuel
+
+  - `paint()` : Dessine les formes sur le canvas
+  - `updateShapeList()` : Met à jour la liste HTML des formes
+
+- **`controller.js`** : Coordination entre le modèle et la vue
+
+  - Gestion des événements utilisateur (boutons, inputs)
+  - Synchronisation entre le modèle et l'affichage
+
+- **`interaction.js`** : Gestion des interactions bas niveau
+
+  - Événements souris (cliquer-glisser)
+  - Calcul des coordonnées relatives au canvas
+
+- **`main.js`** : Point d'entrée de l'application
+  - Initialisation des composants
+  - Configuration de l'environnement
+
+## Lancer l’application
+
+### Méthode simple (recommandée)
+
+Il suffit d'ouvrir le fichier `canvas.html` directement dans le navigateur :
+
+- **Double-cliquer** sur `canvas.html` dans l'explorateur de fichiers
+- Ou faire **clic droit → Ouvrir avec → votre navigateur préféré**
+
+Pas d’installation nécessaire : un double-clic sur `canvas.html` suffit.
+
+### Option : serveur local
+
+Si vous préférez utiliser un serveur de développement local :
 
 **Avec Node.js :**
 
@@ -61,10 +115,70 @@ npx serve .
 python -m http.server
 ```
 
+**Avec PHP :**
+
+```bash
+php -S localhost:8000
+```
+
+**Avec l'extension VS Code :**
+
+Extension VS Code : _Live Server_ (clic droit → Open with Live Server)
+
 Puis accédez à `http://localhost:8000/canvas.html` (ou le port indiqué).
 
-## 5. Auteur
+## 📁 Structure du projet
 
-- **Étudiant** : COPPEAUX Gauthier
-- **Groupe** : M1 IL CLA1
-- **Année** : 2025/2026
+```plaintext
+tpWeb/
+├── canvas.html              # Page principale de l'application
+├── canvas.css               # Styles de l'application
+├── index.html               # Page d'accueil (optionnelle)
+├── model.js                 # Classes métier (Drawing, Shape, etc.)
+├── view.js                  # Gestion du rendu visuel
+├── controller.js            # Contrôleur MVC
+├── interaction.js           # Gestion des événements souris
+├── main.js                  # Point d'entrée
+├── jquery-2.1.3.min.js      # Bibliothèque jQuery
+├── bootstrap/               # Framework Bootstrap
+│   ├── css/
+│   │   └── bootstrap.min.css
+│   ├── fonts/
+│   └── js/
+│       └── bootstrap.min.js
+└── README.md
+```
+
+## Technologies
+
+- **Langage** : JavaScript (ES5)
+- **API** : Canvas HTML5
+- **Framework CSS** : Bootstrap 3
+- **Bibliothèque** : jQuery 2.1.3
+- **Architecture** : MVC (Modèle-Vue-Contrôleur)
+
+## Points clés
+
+1. **Architecture MVC** (demandée par le sujet) : Séparation claire des responsabilités pour un code maintenable
+2. **Dessin interactif** : Cliquer-glisser fluide avec aperçu en temps réel
+3. **Gestion dynamique** : Liste synchronisée automatiquement avec le canvas
+4. **Interface intuitive** : Utilisation de Bootstrap pour un design moderne
+5. **Code extensible** : Architecture permettant d'ajouter facilement de nouvelles formes
+
+## Auteur
+
+**Gauthier COPPEAUX**  
+M1 IL CLA1 - Web Engineering 2025-26
+
+## Ressources
+
+- [Sujet du TP](https://docs.google.com/document/d/1bgGhG9ZVWwf_K9euPAJ9xq8PJsT_zZiJFpPVtc_cW8o/edit?tab=t.0)
+
+## Retour d'expérience
+
+Quelques points marquants pendant le développement :
+
+- Gestion du cercle : calculer un rayon à partir du drag demandait de décider d’une convention (point d’origine = centre ou coin). J’ai retenu centre + rayon.
+- Précision des coordonnées : j’ai arrondi dans la liste pour éviter le bruit visuel (décimales inutiles).
+
+ 
